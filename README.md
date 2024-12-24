@@ -26,38 +26,11 @@ This repo is in active development and updated regularly!
  
 ![Adobe_Premiere_Pro_oQKnCU7Lj5](https://github.com/user-attachments/assets/dcdb9a8d-32d3-4145-95bd-176e30957b09)
 
-
-## Unity Objectives
-- [X] Create Unity Streaming App Base Project (Unity 2022.3.53f1) 
-- [X] Import uniVRM, test VRMs
-- [X] Define 3–4 character personalities and create placeholder models for testing core interactions and scripts.
-- [X] Generate scripts and episodes in advance to ensure smoother pipelines. Live episodes can remain a Phase 2 or 3 stretch goal.
-- [X] Setup Basic Idle Animations
-- [X] Setup Camera Switching, and `LookAtLogic`
-- [X] Setup PayloadManger (Parsing JSON from web endpoint into useful functions)
-- [X] Start with simple text-based interactions.
-- [X] Create Event Listeners and Calls to process the payload
-- [X] Test JSON-based script generation and camera cuts in Unity.
-- [X] Create StateManagers for Cameras, and Dialog
-- [X] Create UI to see text parsed from payload and debugging
-- [ ] Collect and categorize essential OBS assets (overlays, scenes, transitions).
-- [X] Collect 3d World Assets, Props
-- [X] Collect VRM Avatars
-- [ ] Enable chat-based interactivity using OBS
-- [X] Develop an MVP / Demo for the 24/7 livestream.
-- [ ] Create documentation for all of the code and API usage examples
-
 ## Screenshots
 
 ![image](https://hackmd.io/_uploads/Byj-Aoqm1e.png)
 
 ![gcCofMWuAy](https://github.com/user-attachments/assets/16907503-666d-4286-8fb3-1a3c729f230c)
-
-
-### Technical Goals
-
-- Unity for scene control due to VRM animation support.
-- Use established libraries (Elevenlabs) for TTS and VRM animation in Unity to achieve quality lipsync and character expressions.
 
 ## Framework 
 - The 3D visualization framework uses **Unity** for rendering.
@@ -92,93 +65,13 @@ This repo is in active development and updated regularly!
 
 
 
-### Integration with Eliza
+### Integration with Eliza Goal
 - Hook Eliza agents to the system for interactive conversational capabilities.
-
-#### Json Example from Eliza Character File
-
-```json
-{
-  "name": "John Doe",
-  "clients": [],
-  "modelProvider": "openai",
-  "settings": {
-    "secrets": {},
-    "voice": {
-      "model": "en_US-male-medium"
-    }
-  },
-  "bio": [
-    "default text"
-  ],
-  "lore": [
-    "default text"
-  ],
-  "knowledge": [
-    "default text"
-  ],
-  "messageExamples": [
-    [
-      {
-        "user": "{{user1}}",
-        "content": {
-          "text": "default text"
-        }
-      },
-      {
-        "user": "John Doe",
-        "content": {
-          "text": "default text"
-        }
-      }
-    ],
-    [
-      {
-        "user": "{{user1}}",
-        "content": {
-          "text": "default text"
-        }
-      },
-      {
-        "user": "John Doe",
-        "content": {
-          "text": "default text"
-        }
-      }
-    ]
-  ],
-  "postExamples": [
-    "Laughter is the best medicine—unless you're allergic to it! #StayFunny"
-  ],
-  "topics": [
-    "Humor in tough situations",
-    "Making the best of awkward moments"
-  ],
-  "style": {
-    "all": [
-      "uses humor to lighten up any conversation"
-    ],
-    "chat": [
-      "addresses questions with a witty, upbeat response"
-    ],
-    "post": [
-      "posts with lighthearted, comedic tones, often using humor to make serious points"
-    ]
-  },
-  "adjectives": [
-    "WITTY",
-    "CHARMING",
-    "ENERGETIC"
-  ]
-}
-```
 
 
 #### Wishlist
 - Enable human interjections during live streams to enhance humor and prevent infinite AI loops.
 - Develop a "Director Mode" where humans can influence live scenes.
 - Dynamic Voting System - Replace chatbot-like real-time interactivity with a voting system for scene choices. This scales better and simplifies viewer engagement.
-- Build an `AgentState();` function:
-- Monitor and manage the state of AI agents.
 - Allow toggling between AI-driven and human-driven interactions.
 
