@@ -67,6 +67,128 @@ This repo is in active development and updated regularly!
 
 ![image](https://github.com/user-attachments/assets/b3681ea1-d9f1-4549-8241-d8fb7da2a77c)
 
+### Node.js Example
+
+```
+/* Required environment variables are:
+ELEVENLABS_API_KEY
+ANTHROPIC_API_KEY
+*/
+
+// Claude API endpoint
+fastify.post("/api/claude", async function (request, reply) {
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(request.body),
+    });
+    const data = await response.json();
+    return reply.send(data);
+  } catch (error) {
+    fastify.log.error(error);
+    return reply.code(500).send({ error: error.message });
+  }
+});
+
+// ElevenLabs Endpoint to fetch available voices
+fastify.get("/api/elevenlabs/voices", async (request, reply) => {
+  try {
+    const response = await fetch("https://api.elevenlabs.io/v1/voices", {
+      method: "GET",
+      headers: {
+        "xi-api-key": process.env.ELEVENLABS_API_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return reply.code(response.status).send(errorData);
+    }
+
+    const data = await response.json();
+    return reply.send(data);
+  } catch (error) {
+    fastify.log.error(error);
+    return reply.code(500).send({ error: error.message });
+  }
+});
+
+// ElevenLabs Endpoint to speak text using a specified voice
+fastify.post("/api/elevenlabs/speak", async (request, reply) => {
+  const { text, voice_id } = request.body;
+
+  if (!text || !voice_id) {
+    return reply.code(400).send({ error: "Missing 'text' or 'voice_id' in request body." });
+  }
+
+  try {
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "xi-api-key": process.env.ELEVENLABS_API_KEY,
+      },
+      body: JSON.stringify({
+        text: text,
+        voice_settings: { stability: 0.5, similarity_boost: 0.5 }, // Optional voice settings
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return reply.code(response.status).send(errorData);
+    }
+
+    const audioData = await response.buffer();
+    reply.type("audio/mpeg").send(audioData); // Send the audio data as an MP3 file
+  } catch (error) {
+    fastify.log.error(error);
+    return reply.code(500).send({ error: error.message });
+  }
+});
+
+fastify.post("/api/cast-voices", async function (request, reply) {
+  try {
+    const { voices, actors, castingPrompt } = request.body;
+
+    const prompt = `${castingPrompt}
+
+Available Voices:
+${JSON.stringify(voices, null, 2)}
+
+Characters Needing Voices:
+${JSON.stringify(actors, null, 2)}
+
+Please provide a JSON mapping of actor IDs to voice IDs.`;
+
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "claude-3-5-sonnet-20241022",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 2048
+      }),
+    });
+    
+    const data = await response.json();
+    return reply.send(data);
+    
+  } catch (error) {
+    return reply.code(500).send({ error: error.message });
+  }
+});
+```
+
 
 ---
 
